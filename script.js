@@ -1,3 +1,4 @@
+// الحروف المستخدمة داخل الأشكال السداسية
 const letters = [
     'ج', 'ط', 'خ', 'ف', 'ض',
     'ح', 'ك', 'ر', 'غ', 'ق',
@@ -11,6 +12,7 @@ const undoButton = document.getElementById('undo-button');
 
 let history = [];
 
+// إنشاء الأشكال السداسية
 const createHex = (letter) => {
     const hex = document.createElement('div');
     hex.className = 'hex';
@@ -22,6 +24,7 @@ const createHex = (letter) => {
         const currentColor = hex.getAttribute('data-color');
         let newColor;
 
+        // تغيير الألوان بالتسلسل
         if (currentColor === 'white') {
             newColor = 'red';
         } else if (currentColor === 'red') {
@@ -33,6 +36,7 @@ const createHex = (letter) => {
         hex.setAttribute('data-color', newColor);
         hex.style.backgroundColor = newColor;
 
+        // إضافة الإجراء إلى التاريخ للتراجع
         history.push(() => {
             hex.setAttribute('data-color', currentColor);
             hex.style.backgroundColor = currentColor;
@@ -42,10 +46,12 @@ const createHex = (letter) => {
     return hex;
 };
 
+// إنشاء الشبكة السداسية
 letters.forEach(letter => {
     hexGrid.appendChild(createHex(letter));
 });
 
+// زر إعادة
 resetButton.addEventListener('click', () => {
     document.querySelectorAll('.hex').forEach(hex => {
         hex.setAttribute('data-color', 'white');
@@ -54,6 +60,7 @@ resetButton.addEventListener('click', () => {
     history = [];
 });
 
+// زر التراجع
 undoButton.addEventListener('click', () => {
     const lastAction = history.pop();
     if (lastAction) {
