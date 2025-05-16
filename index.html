@@ -1,147 +1,22 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>شبكة سداسية</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background:
-        linear-gradient(to bottom, #90ee90 0%, #90ee90 20%, transparent 20%, transparent 80%, #90ee90 80%, #90ee90 100%),
-        linear-gradient(to right, #ffcccc 0%, #ffcccc 20%, transparent 20%, transparent 80%, #ffcccc 80%, #ffcccc 100%);
-      background-blend-mode: screen;
-    }
-
-    .grid {
-      position: relative;
-      width: 95vmin;
-      height: 95vmin;
-    }
-
-    .hex {
-      width: 16vmin;
-      aspect-ratio: 1 / 0.866;
-      background-color: white;
-      clip-path: polygon(
-        50% 0%, 100% 25%, 100% 75%,
-        50% 100%, 0% 75%, 0% 25%
-      );
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 5vmin;
-      font-weight: bold;
-      color: black;
-      position: absolute;
-      border: 0.5vmin solid black;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.2s;
-    }
-
-    .controls {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-      z-index: 5;
-    }
-
-    .btn, .arrow {
-      width: 90px;
-      height: 50px;
-      font-size: 20px;
-      font-weight: bold;
-      background-color: #eeeeee;
-      border: 2px solid #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .arrow {
-      clip-path: polygon(75% 0%, 25% 50%, 75% 100%, 100% 100%, 50% 50%, 100% 0%);
-      width: 50px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexagon Grid</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="grid" id="grid"></div>
-  <div class="controls">
-    <div class="btn" onclick="resetAll()">إعادة</div>
-    <div class="arrow" onclick="undoLast()"></div>
-  </div>
+    <div class="container">
+        <div class="hex-grid">
+            <!-- Generate hexagons dynamically using JavaScript later -->
+        </div>
+        <div class="controls">
+            <button id="reset-button">إعادة</button>
+            <button id="undo-button">↩</button>
+        </div>
+    </div>
 
-  <script>
-    const grid = document.getElementById("grid");
-    const letters = [
-      'ج','ط','خ','ف','ض',
-      'ح','ك','ر','غ','ق',
-      'ث','ش','د','و','ي',
-      'ن','ب','س','ظ','ذ',
-      'ز','ل','ت','ص','ع'
-    ];
-    const colors = ["white", "#f20001", "#22fa37"];
-    const hexes = [];
-    const history = [];
-
-    const cols = 5;
-    const rows = 5;
-    const spacingX = 13.9;
-    const spacingY = 12;
-
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        const index = row * cols + col;
-        const hex = document.createElement("div");
-        hex.className = "hex";
-        hex.textContent = letters[index];
-        const x = (col - 2) * spacingX + (row % 2 === 1 ? spacingX / 2 : 0);
-        const y = (row - 2) * spacingY;
-        hex.style.left = `calc(50% + ${x}vmin)`;
-        hex.style.top = `calc(50% + ${y}vmin)`;
-        hex.dataset.state = "0";
-        hex.dataset.index = index;
-        hex.addEventListener("click", () => {
-          const current = parseInt(hex.dataset.state);
-          const next = (current + 1) % colors.length;
-          history.push({ index, from: current, to: next });
-          hex.dataset.state = next;
-          hex.style.backgroundColor = colors[next];
-        });
-        grid.appendChild(hex);
-        hexes.push(hex);
-      }
-    }
-
-    function resetAll() {
-      hexes.forEach(hex => {
-        hex.dataset.state = "0";
-        hex.style.backgroundColor = colors[0];
-      });
-      history.length = 0;
-    }
-
-    function undoLast() {
-      const last = history.pop();
-      if (!last) return;
-      const hex = hexes[last.index];
-      hex.dataset.state = last.from;
-      hex.style.backgroundColor = colors[last.from];
-    }
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
